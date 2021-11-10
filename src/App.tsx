@@ -1,9 +1,7 @@
-import styled from "styled-components";
-
-const StyledAppWrapper = styled.div``;
+import Minesweeper from "modules/minesweeper/Minesweeper";
 
 const App = (): JSX.Element => {
-  return <StyledAppWrapper>App</StyledAppWrapper>;
+  return <Minesweeper />;
 };
 
 export default App;
