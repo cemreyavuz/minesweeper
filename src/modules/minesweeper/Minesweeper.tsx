@@ -4,7 +4,7 @@ import { Card, Elevation } from "@blueprintjs/core";
 import styled from "styled-components";
 
 import { MINE_COUNT, TILE_COUNT_PER_ROW, TILE_SIZE } from "common/constants";
-import Tile from 'components/tile/Tile';
+import Tile from "components/tile/Tile";
 
 export type Mine = {
   isMine?: boolean;
@@ -72,12 +72,48 @@ const Minesweeper = (props: MinesweeperProps): JSX.Element => {
   const handleTileClick =
     (i: number, j: number): (() => void) =>
     (): void => {
-      setVisitedTiles((prevVisitedTiles) => {
-        const newVisitedTiles = { ...prevVisitedTiles };
-        newVisitedTiles[`${i},${j}`] = true;
-        return newVisitedTiles;
-      });
+      const tilesToVisitInThisRound: Record<string, boolean> = {};
+      visitTile(i, j, tilesToVisitInThisRound);
+      setVisitedTiles((prevVisitedTiles) => ({
+        ...prevVisitedTiles,
+        ...tilesToVisitInThisRound,
+      }));
     };
+
+  const getTileKey = (i: number, j: number): string => `${i},${j}`;
+
+  const visitTile = (
+    i: number,
+    j: number,
+    t: Record<string, boolean>
+  ): void => {
+    t[getTileKey(i, j)] = true;
+    const isEmpty = tiles[i][j].neighborCount === 0;
+    if (isEmpty) {
+      const neighbors = [
+        [i - 1, j - 1],
+        [i - 1, j],
+        [i - 1, j + 1],
+        [i, j - 1],
+        [i, j + 1],
+        [i + 1, j - 1],
+        [i + 1, j],
+        [i + 1, j + 1],
+      ];
+
+      neighbors.forEach(([x, y]) => {
+        if (
+          x >= 0 &&
+          y >= 0 &&
+          x < TILE_COUNT_PER_ROW &&
+          y < TILE_COUNT_PER_ROW &&
+          !t[getTileKey(x, y)]
+        ) {
+          visitTile(x, y, t);
+        }
+      });
+    }
+  };
 
   return (
     <StyledMinesweeperWrapper>
@@ -88,8 +124,8 @@ const Minesweeper = (props: MinesweeperProps): JSX.Element => {
             .fill(0)
             .map((_, columnIndex) => (
               <Tile
-                key={`${rowIndex},${columnIndex}`}
-                isVisited={visitedTiles[`${rowIndex},${columnIndex}`]}
+                key={getTileKey(rowIndex, columnIndex)}
+                isVisited={visitedTiles[getTileKey(rowIndex, columnIndex)]}
                 onClick={handleTileClick(rowIndex, columnIndex)}
                 {...tiles[rowIndex][columnIndex]}
               />
