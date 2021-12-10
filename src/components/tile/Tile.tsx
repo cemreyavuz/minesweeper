@@ -1,4 +1,6 @@
-import { Colors } from "@blueprintjs/core";
+import { MouseEvent, useState } from "react";
+
+import { Colors, Icon, IconSize } from "@blueprintjs/core";
 import styled from "styled-components";
 
 import { TILE_SIZE } from "common/constants";
@@ -28,7 +30,7 @@ const getTileColor = (neighborCount?: number): string => {
     case 8:
       return Colors.SEPIA3;
     default:
-      return '';
+      return "";
   }
 };
 
@@ -38,24 +40,53 @@ const Tile = ({
   neighborCount,
   onClick,
 }: TileProps): JSX.Element => {
+  const [isMarked, setIsMarked] = useState(false);
+
+  const handleRightClick = (e: MouseEvent<HTMLButtonElement>): boolean => {
+    if (e.button === 2) {
+      setIsMarked((prevIsMarked) => !prevIsMarked);
+    }
+    e.preventDefault(); // prevent opening context menu
+    return false;
+  };
+
   if (!isVisited) {
-    return <StyledTileWrapper onClick={onClick} />;
+    return (
+      <StyledTileWrapper onClick={onClick} onContextMenu={handleRightClick}>
+        {isMarked ? (
+          <Icon color={Colors.GRAY1} icon="flag" size={IconSize.STANDARD} />
+        ) : (
+          <></>
+        )}
+      </StyledTileWrapper>
+    );
   }
 
   if (!isMine) {
     return (
-      <StyledTileWrapper $color={getTileColor(neighborCount)} $isVisited={isVisited}>
+      <StyledTileWrapper
+        $color={getTileColor(neighborCount)}
+        $isVisited={isVisited}
+      >
         {neighborCount || ""}
       </StyledTileWrapper>
     );
   }
 
-  return <StyledTileWrapper $isVisited={isVisited}>X</StyledTileWrapper>;
+  return (
+    <StyledTileWrapper $isVisited={isVisited}>
+      <Icon color={Colors.RED2} icon="graph" size={IconSize.STANDARD} />
+    </StyledTileWrapper>
+  );
 };
 
-const StyledTileWrapper = styled.button<{ $color?: string, $isVisited?: boolean; }>`
+const StyledTileWrapper = styled.button<{
+  $color?: string;
+  $isVisited?: boolean;
+}>`
   align-items: center;
-  background-color: ${({ $isVisited }) => $isVisited ? Colors.LIGHT_GRAY5 : Colors.LIGHT_GRAY3};
+  background-color: ${({ $isVisited }) =>
+    $isVisited ? Colors.LIGHT_GRAY5 : Colors.LIGHT_GRAY3};
   border: 1px solid ${Colors.LIGHT_GRAY1};
   color: ${({ $color }) => $color || Colors.DARK_GRAY1};
   display: flex;

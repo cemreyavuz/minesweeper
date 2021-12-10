@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
+import '@blueprintjs/icons/lib/css/blueprint-icons.css';
 import '@blueprintjs/core/lib/css/blueprint.css';
 
 export const StyledGlobalStyle = createGlobalStyle`
