@@ -1,0 +1,1 @@
+export const MINESWEEPER_CANVAS_SIZE = 400;
