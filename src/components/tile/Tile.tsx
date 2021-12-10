@@ -7,6 +7,7 @@ import { TILE_SIZE } from "common/constants";
 import { Mine } from "modules/minesweeper/Minesweeper";
 
 type TileProps = {
+  isGameOver?: boolean;
   isVisited?: boolean;
   onClick: () => void;
 } & Mine;
@@ -35,6 +36,7 @@ const getTileColor = (neighborCount?: number): string => {
 };
 
 const Tile = ({
+  isGameOver,
   isVisited,
   isMine,
   neighborCount,
@@ -42,8 +44,14 @@ const Tile = ({
 }: TileProps): JSX.Element => {
   const [isMarked, setIsMarked] = useState(false);
 
+  const handleClick = (): void => {
+    if (!isGameOver) {
+      onClick();
+    }
+  }
+
   const handleRightClick = (e: MouseEvent<HTMLButtonElement>): boolean => {
-    if (e.button === 2) {
+    if (!isGameOver && e.button === 2) {
       setIsMarked((prevIsMarked) => !prevIsMarked);
     }
     e.preventDefault(); // prevent opening context menu
@@ -52,7 +60,7 @@ const Tile = ({
 
   if (!isVisited) {
     return (
-      <StyledTileWrapper onClick={onClick} onContextMenu={handleRightClick}>
+      <StyledTileWrapper onClick={handleClick} onContextMenu={handleRightClick}>
         {isMarked ? (
           <Icon color={Colors.GRAY1} icon="flag" size={IconSize.STANDARD} />
         ) : (
