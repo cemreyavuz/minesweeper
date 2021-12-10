@@ -1,5 +1,4 @@
-import React from 'react';
-
+import { Card, Elevation } from '@blueprintjs/core';
 import styled from 'styled-components';
 
 import { MINESWEEPER_CANVAS_SIZE } from 'common/constants';
@@ -13,7 +12,7 @@ const Minesweeper = (props: MinesweeperProps): JSX.Element => {
   );
 };
 
-const StyledMinesweeperWrapper = styled.div`
+const StyledMinesweeperWrapper = styled(Card).attrs({ elevation: Elevation.ONE })`
   height: ${MINESWEEPER_CANVAS_SIZE}px;
   width: ${MINESWEEPER_CANVAS_SIZE}px;
 `;
