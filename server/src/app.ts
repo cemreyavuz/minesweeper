@@ -30,7 +30,6 @@ class App {
     this.env = process.env.NODE_ENV || 'development';
 
     this.initializeCache();
-    this.initializePeerServer();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeSwagger();
@@ -38,27 +37,17 @@ class App {
   }
 
   public listen() {
-    this.app.listen(this.port, () => {
+    const server = this.app.listen(this.port, () => {
       logger.info(`=================================`);
       logger.info(`======= ENV: ${this.env} =======`);
       logger.info(`🚀 App listening on the port ${this.port}`);
       logger.info(`=================================`);
     });
-  }
-
-  public initializePeerServer() {
-    const server = http.createServer(this.app);
-    this.peerServer = ExpressPeerServer(server, {
-      path: '/',
-    });
+    this.peerServer = ExpressPeerServer(server, { path: '/' });
     this.app.use('/peers/connection', this.peerServer);
 
-    this.peerServer.on('connection', client => {
-      console.log('peer connected', client);
-    });
-
-    this.peerServer.on('disconnect', client => {
-      console.log('peer disconnected', client);
+    this.peerServer.on('connection', ({ id }) => {
+      console.log(`client connected with id: ${id}`);
     });
   }
 
