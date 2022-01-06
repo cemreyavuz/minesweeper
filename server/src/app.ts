@@ -7,11 +7,12 @@ import config from 'config';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
+import cache from 'memory-cache';
 import morgan from 'morgan';
-import { connect, set } from 'mongoose';
+import http from 'http';
+import { ExpressPeerServer } from 'peer';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { dbConnection } from '@databases';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
@@ -21,12 +22,15 @@ class App {
   public port: string | number;
   public env: string;
 
+  private peerServer;
+
   constructor(routes: Routes[]) {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
 
-    // this.connectToDatabase();
+    this.initializeCache();
+    this.initializePeerServer();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeSwagger();
@@ -42,16 +46,28 @@ class App {
     });
   }
 
+  public initializePeerServer() {
+    const server = http.createServer(this.app);
+    this.peerServer = ExpressPeerServer(server, {
+      path: '/',
+    });
+    this.app.use('/peers/connection', this.peerServer);
+
+    this.peerServer.on('connection', client => {
+      console.log('peer connected', client);
+    });
+
+    this.peerServer.on('disconnect', client => {
+      console.log('peer disconnected', client);
+    });
+  }
+
   public getServer() {
     return this.app;
   }
 
-  private connectToDatabase() {
-    if (this.env !== 'production') {
-      set('debug', true);
-    }
-
-    connect(dbConnection.url, dbConnection.options);
+  private initializeCache() {
+    cache.put('peers', {}); // TODO: add Peer type
   }
 
   private initializeMiddlewares() {
