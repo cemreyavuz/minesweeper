@@ -19,7 +19,7 @@ const App = (): JSX.Element => {
       {
         host: "localhost",
         port: 4000,
-        path: "/peers/connection",
+        path: "/peer-connection",
       }
     );
 

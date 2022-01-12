@@ -9,7 +9,6 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import cache from 'memory-cache';
 import morgan from 'morgan';
-import http from 'http';
 import { ExpressPeerServer } from 'peer';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -44,10 +43,23 @@ class App {
       logger.info(`=================================`);
     });
     this.peerServer = ExpressPeerServer(server, { path: '/' });
-    this.app.use('/peers/connection', this.peerServer);
+    this.app.use('/peer-connection', this.peerServer);
 
     this.peerServer.on('connection', ({ id }) => {
       console.log(`client connected with id: ${id}`);
+
+      const peers = cache.get('peers');
+      const updatedPeers = { ...peers, [id]: true };
+      cache.put('peers', updatedPeers);
+    });
+
+    this.peerServer.on('disconnect', ({ id }) => {
+      console.log(`client disconnected with id: ${id}`);
+
+      const peers = cache.get('peers');
+      const updatedPeers = { ...peers };
+      delete updatedPeers[id];
+      cache.put('peers', updatedPeers);
     });
   }
 
