@@ -69,6 +69,7 @@ class App {
 
   private initializeCache() {
     cache.put('peers', {}); // TODO: add Peer type
+    cache.put('rooms', []);
   }
 
   private initializeMiddlewares() {
