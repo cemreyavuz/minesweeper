@@ -5,9 +5,9 @@ export class CreateRoomDto {
   @Length(3, 24)
   public name: string;
 
-  @IsString({ each: true })
-  @Length(16, 16, { each: true })
-  public peers: string[];
+  @IsString()
+  @Length(16, 16)
+  public leader: string;
 }
 
 export class UpdateRoomDto {
