@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import { PeerProvider } from "contexts/PeerContext";
-import RoomList from "modules/room-list/RoomList";
+import Routes from "Routes";
 
 const StyledAppWrapper = styled.div`
   align-items: center;
@@ -14,7 +14,7 @@ const App = (): JSX.Element => {
   return (
     <PeerProvider>
       <StyledAppWrapper>
-        <RoomList />
+        <Routes />
       </StyledAppWrapper>
     </PeerProvider>
   );

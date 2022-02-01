@@ -1,30 +1,13 @@
-import { useContext, useEffect } from "react";
-
-import Peer from "peerjs";
+import { useContext } from "react";
 
 import { PeerContext } from "contexts/PeerContext";
 
 type RoomListProps = {};
 
 const RoomList = (props: RoomListProps): JSX.Element => {
-  const { connection, setConnection } = useContext(PeerContext);
-  
-  useEffect(() => {
-    const serverConnection = new Peer(
-      (Math.random().toString(36) + "0000000000000000000").substring(2, 16),
-      {
-        host: "localhost",
-        port: 4000,
-        path: "/peer-connection",
-      }
-    );
+  const { connection, peerId } = useContext(PeerContext);
 
-    serverConnection.on("open", (id) => {
-      setConnection(serverConnection);
-    });
-  }, [setConnection]);
-
-  console.log(connection);
+  console.log(connection, peerId);
 
   return <div>RoomList</div>;
 };
