@@ -1,25 +1,19 @@
 import { useContext } from "react";
 
 import { PeerContext } from "contexts/PeerContext";
+import { useCreateRoom } from "hooks";
 
 const RoomList = (): JSX.Element => {
   const { connection, peerId } = useContext(PeerContext);
 
-  const createRoom = (): void => {
-    fetch("http://localhost:4000/rooms", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: `${peerId}'s room`,
-        leader: peerId,
-      }),
-    });
+  const { mutate: createRoom } = useCreateRoom();
+
+  const handleCreateRoom = () => {
+    createRoom({ peerId });
   };
 
   return (
-    <div>{connection && <button onClick={createRoom}>Create room</button>}</div>
+    <div>{connection && <button onClick={handleCreateRoom}>Create room</button>}</div>
   );
 };
 
