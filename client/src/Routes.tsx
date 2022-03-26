@@ -10,7 +10,7 @@ const Routes = (): JSX.Element => {
   useEffect(() => {
     const generatedId = (
       Math.random().toString(36) + "0000000000000000000"
-    ).substring(2, 16);
+    ).substring(2, 18);
     const serverConnection = new Peer(
       generatedId,
       {

@@ -8,10 +8,10 @@ class PeersRoute implements Routes {
   public peersController = new PeersController();
 
   constructor() {
-    this.initializeRoutes();
+    this.getPeers();
   }
 
-  private initializeRoutes() {
+  private getPeers() {
     this.router.get(`${this.path}`, this.peersController.getPeers);
   }
 }
