@@ -1,13 +1,22 @@
 import { Breadcrumbs } from "@blueprintjs/core";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Room = (): JSX.Element => {
+  const navigate = useNavigate();
   const params = useParams<{ roomId: string }>();
 
   return (
     <div>
       <Breadcrumbs
-        items={[{ href: "/", text: "Rooms" }, { text: params.roomId }]}
+        items={[
+          {
+            onClick: () => {
+              navigate("/");
+            },
+            text: "Rooms",
+          },
+          { text: params.roomId },
+        ]}
       />
     </div>
   );
