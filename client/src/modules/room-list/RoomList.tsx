@@ -32,16 +32,16 @@ const RoomList = (): JSX.Element => {
     createRoom({ peerId });
   };
 
-  const handleJoinRoom = (leaderId: string) => () => {
-    navigate(`room/${peerId}`);
+  const handleJoinRoom = (roomName: string) => () => {
+    navigate(`room/${roomName}`);
   };
 
   return (
     <StyledRoomListContainer>
-      {rooms.map(({ leader, name }) => (
+      {rooms.map(({ name }) => (
         <StyledJoinRoomButton
-          key={`join-room-button-${leader}`}
-          onClick={handleJoinRoom(leader)}
+          key={`join-room-button-${name}`}
+          onClick={handleJoinRoom(name)}
         >
           Join to room: {name}
         </StyledJoinRoomButton>
