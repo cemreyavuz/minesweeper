@@ -56,10 +56,16 @@ class App {
     this.peerServer.on('disconnect', ({ id }) => {
       console.log(`client disconnected with id: ${id}`);
 
+      // Delete disconnected peer from peers list
       const peers = cache.get('peers');
       const updatedPeers = { ...peers };
       delete updatedPeers[id];
       cache.put('peers', updatedPeers);
+
+      // Delete rooms that disconnected peer is the leader of
+      const rooms = cache.get('rooms');
+      const updatedRooms = rooms.filter(room => room.leader !== id);
+      cache.put('rooms', updatedRooms);
     });
   }
 

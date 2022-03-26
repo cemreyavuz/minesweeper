@@ -14,6 +14,7 @@ const StyledAppWrapper = styled.div`
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      cacheTime: 0,
       refetchOnWindowFocus: false,
       staleTime: 5 * 60 * 1000,
     },
