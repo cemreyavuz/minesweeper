@@ -1,10 +1,11 @@
 import { useContext } from "react";
+import { Button } from "@blueprintjs/core";
 
 import { PeerContext } from "contexts/PeerContext";
 import { useCreateRoom } from "hooks";
 
 const RoomList = (): JSX.Element => {
-  const { connection, peerId } = useContext(PeerContext);
+  const { peerId } = useContext(PeerContext);
 
   const { mutate: createRoom } = useCreateRoom();
 
@@ -13,7 +14,11 @@ const RoomList = (): JSX.Element => {
   };
 
   return (
-    <div>{connection && <button onClick={handleCreateRoom}>Create room</button>}</div>
+    <div>
+      <Button intent="success" onClick={handleCreateRoom}>
+        Create room
+      </Button>
+    </div>
   );
 };
 
