@@ -1,11 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  UseMutationOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 
 import { BASE_QUERY_KEY } from "common/constants";
 
 type Room = {
   leader: string;
   name: string;
-}
+};
+
+type CreateRoomData = {
+  peerId?: string;
+};
 
 const getRoomsQueryKey = () => [BASE_QUERY_KEY, "rooms"];
 
@@ -19,11 +28,13 @@ export const useRooms = () => {
   });
 };
 
-export const useCreateRoom = () => {
+export const useCreateRoom = (
+  options?: UseMutationOptions<unknown, unknown, CreateRoomData>
+) => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    ({ peerId }: { peerId?: string }) => {
+    ({ peerId }: CreateRoomData) => {
       if (!peerId) {
         throw new Error("peerId is required");
       }
@@ -40,9 +51,11 @@ export const useCreateRoom = () => {
       });
     },
     {
-      onSuccess: () => {
+      onSuccess: (...args) => {
         queryClient.invalidateQueries(getRoomsQueryKey());
+        options?.onSuccess?.(...args);
       },
+      ...options,
     }
   );
 };

@@ -1,8 +1,15 @@
 import { useContext, useEffect } from "react";
 
+import Peer from "peerjs";
+import {
+  BrowserRouter,
+  Route,
+  Routes as ReactRouterRoutes,
+} from "react-router-dom";
+
 import { PeerContext } from "contexts/PeerContext";
 import RoomList from "modules/room-list/RoomList";
-import Peer from "peerjs";
+import Room from "modules/room/Room";
 
 const Routes = (): JSX.Element => {
   const { setConnection, setPeerId } = useContext(PeerContext);
@@ -11,14 +18,11 @@ const Routes = (): JSX.Element => {
     const generatedId = (
       Math.random().toString(36) + "0000000000000000000"
     ).substring(2, 18);
-    const serverConnection = new Peer(
-      generatedId,
-      {
-        host: "localhost",
-        port: 4000,
-        path: "/peer-connection",
-      }
-    );
+    const serverConnection = new Peer(generatedId, {
+      host: "localhost",
+      port: 4000,
+      path: "/peer-connection",
+    });
 
     serverConnection.on("open", (peerId: string) => {
       setConnection(serverConnection);
@@ -34,7 +38,14 @@ const Routes = (): JSX.Element => {
     });
   }, [setConnection, setPeerId]);
 
-  return <RoomList />;
+  return (
+    <BrowserRouter>
+      <ReactRouterRoutes>
+        <Route index element={<RoomList />} />
+        <Route path="room/:roomId" element={<Room />} />
+      </ReactRouterRoutes>
+    </BrowserRouter>
+  );
 };
 
 export default Routes;

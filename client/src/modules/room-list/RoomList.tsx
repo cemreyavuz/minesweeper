@@ -1,6 +1,7 @@
 import { useContext } from "react";
 
 import { Button } from "@blueprintjs/core";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { PeerContext } from "contexts/PeerContext";
@@ -18,10 +19,14 @@ const StyledJoinRoomButton = styled(Button)`
 const RoomList = (): JSX.Element => {
   const { peerId } = useContext(PeerContext);
 
-  const { data: rooms = [] } = useRooms();
-  const { mutate: createRoom } = useCreateRoom();
+  const navigate = useNavigate();
 
-  console.log(rooms);
+  const { data: rooms = [] } = useRooms();
+  const { mutate: createRoom } = useCreateRoom({
+    onSuccess: () => {
+      navigate(`room/${peerId}`);
+    },
+  });
 
   const handleCreateRoom = () => {
     createRoom({ peerId });
