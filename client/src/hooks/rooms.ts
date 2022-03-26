@@ -45,17 +45,22 @@ export const useCreateRoom = (
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: `${peerId}'s room`,
+          name: peerId,
           leader: peerId,
         }),
+      }).then((rawResponse) => {
+        if (!rawResponse.ok) {
+          throw new Error("Error creating room");
+        }
       });
     },
     {
+      ...options,
       onSuccess: (...args) => {
+        console.log("on success", args);
         queryClient.invalidateQueries(getRoomsQueryKey());
         options?.onSuccess?.(...args);
       },
-      ...options,
     }
   );
 };
