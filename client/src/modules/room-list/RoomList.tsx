@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import { PeerContext } from "contexts/PeerContext";
 import { useCreateRoom, useRooms } from "hooks";
+import { RoomTable } from "components/room-table/RoomTable";
 
 const StyledRoomListContainer = styled.div`
   display: flex;
@@ -38,6 +39,7 @@ const RoomList = (): JSX.Element => {
 
   return (
     <StyledRoomListContainer>
+      <RoomTable />
       {rooms.map(({ name }) => (
         <StyledJoinRoomButton
           key={`join-room-button-${name}`}
