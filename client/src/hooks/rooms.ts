@@ -1,5 +1,6 @@
 import {
   UseMutationOptions,
+  UseQueryOptions,
   useMutation,
   useQuery,
   useQueryClient,
@@ -25,6 +26,22 @@ export const useRooms = () => {
       .then((rawResponse) => rawResponse.json())
       .then((jsonResponse) => jsonResponse.data);
   });
+};
+
+const getRoomQueryKey = (id: string) => [BASE_QUERY_KEY, "rooms", id];
+
+export const useRoom = (id: string, options?: UseQueryOptions<Room>) => {
+  return useQuery<Room>(
+    getRoomQueryKey(id),
+    () => {
+      return fetch(`http://localhost:4000/rooms/${id}`, {
+        method: "GET",
+      })
+        .then((rawResponse) => rawResponse.json())
+        .then((jsonResponse) => jsonResponse.data);
+    },
+    options
+  );
 };
 
 export const useCreateRoom = (

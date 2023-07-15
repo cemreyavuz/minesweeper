@@ -17,10 +17,10 @@ class RoomsController {
 
   public getRoomsById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const roomName: string = req.params.name;
+      const roomId: string = req.params.id;
 
       const rooms: Room[] = cache.get('rooms');
-      const room = rooms.find(({ name: testName }: Room) => testName === roomName);
+      const room = rooms.find(({ id: testId }: Room) => testId === roomId);
 
       res.status(200).json({ data: room });
     } catch (error) {

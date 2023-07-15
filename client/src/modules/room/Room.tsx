@@ -1,9 +1,12 @@
 import { Breadcrumbs } from "@blueprintjs/core";
+import { useRoom } from "hooks";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Room = (): JSX.Element => {
   const navigate = useNavigate();
-  const params = useParams<{ roomId: string }>();
+  const { roomId } = useParams<{ roomId: string }>();
+
+  const { data: room } = useRoom(roomId!, { enabled: !!roomId });
 
   return (
     <div>
@@ -15,7 +18,7 @@ const Room = (): JSX.Element => {
             },
             text: "Rooms",
           },
-          { text: params.roomId },
+          { text: room?.name },
         ]}
       />
     </div>
