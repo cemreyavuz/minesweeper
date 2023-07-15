@@ -1,7 +1,10 @@
-import { IsAlphanumeric, IsString, Length } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 
 export class CreateRoomDto {
-  @IsAlphanumeric()
+  @IsString()
+  @Length(36, 36)
+  public id: string;
+
   @IsString()
   @Length(3, 24)
   public name: string;

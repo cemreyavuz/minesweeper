@@ -8,13 +8,12 @@ import {
 import { BASE_QUERY_KEY } from "common/constants";
 
 type Room = {
+  id: string;
   leader: string;
   name: string;
 };
 
-type CreateRoomData = {
-  peerId?: string;
-};
+type CreateRoomData = Room;
 
 const getRoomsQueryKey = () => [BASE_QUERY_KEY, "rooms"];
 
@@ -34,19 +33,16 @@ export const useCreateRoom = (
   const queryClient = useQueryClient();
 
   return useMutation(
-    ({ peerId }: CreateRoomData) => {
-      if (!peerId) {
-        throw new Error("peerId is required");
-      }
-
+    ({ id, name, leader }: CreateRoomData) => {
       return fetch("http://localhost:4000/rooms", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: peerId,
-          leader: peerId,
+          id,
+          name,
+          leader,
         }),
       }).then((rawResponse) => {
         if (!rawResponse.ok) {
