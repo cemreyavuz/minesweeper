@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 
-import { Button } from "@blueprintjs/core";
-import { TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { v4 as uuid } from 'uuid';
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -10,11 +9,6 @@ import { PeerContext } from "contexts/PeerContext";
 import { useCreateRoom } from "hooks";
 import { RoomTable } from "components/room-table/RoomTable";
 import { Modal } from "components/modal/Modal";
-
-const StyledRoomListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 const RoomList = (): JSX.Element => {
   const { peerId } = useContext(PeerContext);
@@ -38,11 +32,12 @@ const RoomList = (): JSX.Element => {
   };
 
   return (
-    <StyledRoomListContainer>
+    <Container>
+      <Header>
+        <Typography variant="h6">Rooms</Typography>
+        <Button onClick={() => setIsCreateModalOpen(true)} size="small" variant="contained">Create room</Button>
+      </Header>
       <RoomTable />
-      <Button intent="success" onClick={() => setIsCreateModalOpen(true)}>
-        Create room
-      </Button>
       <Modal
         okDisabled={roomName.length === 0}
         onClose={() => setIsCreateModalOpen(false)}
@@ -58,8 +53,18 @@ const RoomList = (): JSX.Element => {
           value={roomName}
         />
       </Modal>
-    </StyledRoomListContainer>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 export default RoomList;

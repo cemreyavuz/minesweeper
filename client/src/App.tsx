@@ -5,10 +5,8 @@ import { PeerProvider } from "contexts/PeerContext";
 import Routes from "Routes";
 
 const StyledAppWrapper = styled.div`
-  align-items: center;
-  display: flex;
   height: 100%;
-  justify-content: center;
+  padding: 36px;
 `;
 
 const queryClient = new QueryClient({

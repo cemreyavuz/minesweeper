@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import { CONTENT_WIDTH } from "common/constants";
 import { useRooms } from "hooks";
 
 type RoomTableProps = {};
@@ -25,7 +24,7 @@ export const RoomTable = (props: RoomTableProps): JSX.Element => {
 
   return (
     <TableContainer>
-      <Table sx={{ width: CONTENT_WIDTH }}>
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell>ID</TableCell>
